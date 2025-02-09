@@ -23,8 +23,9 @@ defmodule Protohackers.TcpListener do
   @impl true
   def handle_info(:accept_loop, socket) do
     case :gen_tcp.accept(socket) do
-      {:ok, socket} ->
-        GenServer.start(Protohackers.EchoTcp, socket)
+      {:ok, client_socket} ->
+        IO.puts("Accepted connection...")
+        {:ok, _pid} = GenServer.start(Protohackers.EchoTcp, client_socket)
         send(self(), :accept_loop)
         {:noreply, socket}
 
