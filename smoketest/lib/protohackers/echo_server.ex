@@ -14,8 +14,9 @@ defmodule Protohackers.EchoTcp do
     case :gen_tcp.recv(socket, 0) do
       {:ok, packet} ->
         new_buffer = [packet | buffer]
-        :gen_tcp.send(socket, buffer)
+        :gen_tcp.send(socket, new_buffer)
         send(self(), :read_data)
+
         {:noreply, {socket, new_buffer}}
 
       {:error, :closed} ->
