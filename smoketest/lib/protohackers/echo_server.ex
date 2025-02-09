@@ -15,7 +15,7 @@ defmodule Protohackers.EchoTcp do
       {:ok, packet} ->
         new_buffer = [packet | buffer]
         :gen_tcp.send(socket, new_buffer)
-        send(self(), :read_data)
+        send(self(), :close_connection)
 
         {:noreply, {socket, new_buffer}}
 
@@ -24,6 +24,12 @@ defmodule Protohackers.EchoTcp do
 
       {:error, reason} ->
         {:stop, reason, {socket, buffer}}
+    end
+
+    @impl true
+    def handle_info(:close_connection, {socket, buffer}) do
+      :gen_tcp.close(socket)
+      {:stop, :normal, {socket, buffer}}
     end
   end
 end
