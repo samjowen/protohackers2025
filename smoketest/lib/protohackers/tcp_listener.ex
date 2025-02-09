@@ -7,13 +7,30 @@ defmodule Protohackers.TcpListener do
 
   @impl true
   def init(_) do
+    Process.flag(:trap_exit, true)
+
     {:ok, socket} =
       :gen_tcp.listen(
         80,
-        [:binary, packet: :line, active: :once, reuseaddr: true]
+        [:binary, packet: :line, active: false, reuseaddr: true]
       )
 
     IO.puts("Listening on port 80")
+    send(self(), :accept_loop)
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_info(:accept_loop, socket) do
+    case :gen_tcp.accept(socket) do
+      {:ok, socket} ->
+        GenServer.start(Protohackers.EchoTcp, socket)
+        send(self(), :accept_loop)
+        {:noreply, socket}
+
+      {:error, _reason} ->
+        send(self(), :accept_loop)
+        {:noreply, socket}
+    end
   end
 end
