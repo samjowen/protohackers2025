@@ -5,6 +5,7 @@ defmodule Protohackers.EchoTcp do
   def init(socket) do
     buffer = []
     send(self(), :read_data)
+    Process.flag(:trap_exit, true)
     {:ok, {socket, buffer}}
   end
 
@@ -15,8 +16,7 @@ defmodule Protohackers.EchoTcp do
         new_buffer = [packet | buffer]
         IO.puts("Echoing #{new_buffer}")
         :gen_tcp.send(socket, new_buffer)
-        :gen_tcp.close(socket)
-
+        :ok = :gen_tcp.close(socket)
         {:noreply, {socket, new_buffer}}
 
       {:error, :closed} ->

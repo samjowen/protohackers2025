@@ -34,4 +34,9 @@ defmodule Protohackers.TcpListener do
         {:noreply, socket}
     end
   end
+
+  def handle_info({:EXIT, _, :normal}, state) do
+    send(self(), :accept_loop)
+    {:noreply, state}
+  end
 end
