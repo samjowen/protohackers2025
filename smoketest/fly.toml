@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for smoketest-late-flower-3104 on 2025-02-09T19:12:41Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'smoketest-late-flower-3104'
+primary_region = 'lhr'
+
+[build]
+  builder = 'heroku/buildpacks:20'
+  buildpacks = ['https://cnb-shim.herokuapp.com/v1/hashnuke/elixir']
+
+[env]
+  PORT = '8080'
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
