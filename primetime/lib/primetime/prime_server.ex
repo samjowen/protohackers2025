@@ -1,4 +1,4 @@
-defmodule Primetime.IsPrime do
+defmodule Primetime.PrimeServer do
   @moduledoc false
 
   use GenServer

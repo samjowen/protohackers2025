@@ -27,7 +27,7 @@ defmodule Primetime.TcpListener do
   def handle_continue(:accept_routine, %__MODULE__{} = state) do
     case :gen_tcp.accept(state.listen_socket) do
       {:ok, socket} ->
-        GenServer.start(Primetime.IsPrime, socket)
+        GenServer.start(Primetime.PrimeServer, socket)
         {:noreply, state, {:continue, :accept_routine}}
 
       {:error, reason} ->
