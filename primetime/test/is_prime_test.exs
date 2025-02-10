@@ -1,7 +1,7 @@
-defmodule Primetime.Math.PrimeTest do
+defmodule Primetime.PrimeTest do
   use ExUnit.Case, async: true
 
-  import Primetime.Math.Prime
+  import Primetime.IsPrime
   # No DB hits or anything like that, these are pure unit tests so can be async
   test "is_prime?/1 returns false for even numbers that aren't 2" do
     assert is_prime?(2) === true

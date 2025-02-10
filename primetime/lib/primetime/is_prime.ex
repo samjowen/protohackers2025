@@ -1,4 +1,4 @@
-defmodule Primetime.Math.Prime do
+defmodule Primetime.IsPrime do
   @moduledoc false
 
   # 1 is not prime – it's a unit.

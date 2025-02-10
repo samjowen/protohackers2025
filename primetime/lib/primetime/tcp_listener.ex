@@ -1,4 +1,4 @@
-defmodule Primetime.Net.TcpListener do
+defmodule Primetime.TcpListener do
   @moduledoc false
   use GenServer
 
