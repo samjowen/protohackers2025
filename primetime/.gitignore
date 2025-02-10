@@ -24,3 +24,6 @@ primetime-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# MacOS files
+.DS_Store
