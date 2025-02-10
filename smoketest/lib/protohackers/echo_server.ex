@@ -13,7 +13,7 @@ defmodule Protohackers.EchoTcp do
     case :gen_tcp.recv(socket, 0) do
       {:ok, data} ->
         :gen_tcp.send(socket, data)
-        IO.inspect(packet, label: "Echoing")
+        IO.inspect(data, label: "Echoing")
         send(self(), :read_data)
         {:noreply, {socket}}
 
