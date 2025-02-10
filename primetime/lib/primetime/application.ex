@@ -9,7 +9,7 @@ defmodule Primetime.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Primetime.Worker.start_link(arg)
-      # {Primetime.Worker, arg}
+      {Primetime.Net.TcpListener, :no_state}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
