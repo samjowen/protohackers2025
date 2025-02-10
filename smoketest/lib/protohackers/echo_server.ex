@@ -3,27 +3,28 @@ defmodule Protohackers.EchoTcp do
 
   @impl true
   def init(socket) do
-    buffer = []
     send(self(), :read_data)
     Process.flag(:trap_exit, true)
-    {:ok, {socket, buffer}}
+    {:ok, {socket}}
   end
 
   @impl true
-  def handle_info(:read_data, {socket, buffer}) do
+  def handle_info(:read_data, {socket}) do
     case :gen_tcp.recv(socket, 0) do
-      {:ok, packet} ->
-        new_buffer = [packet | buffer]
-        IO.puts("Echoing #{new_buffer}")
-        :gen_tcp.send(socket, new_buffer)
-        :ok = :gen_tcp.close(socket)
-        {:noreply, {socket, new_buffer}}
+      {:ok, data} ->
+        :gen_tcp.send(socket, data)
+        IO.puts("Echoing #{data}")
+        send(self(), :read_data)
+        {:noreply, {socket}}
 
       {:error, :closed} ->
-        {:stop, :normal, {socket, buffer}}
+        IO.puts("Client finished sending, closing socket")
+        # Close only after EOF
+        :gen_tcp.close(socket)
+        {:stop, :normal, {socket}}
 
       {:error, reason} ->
-        {:stop, reason, {socket, buffer}}
+        {:stop, reason, {socket}}
     end
   end
 end
