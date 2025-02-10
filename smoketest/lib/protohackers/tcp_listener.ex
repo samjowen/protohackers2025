@@ -12,7 +12,7 @@ defmodule Protohackers.TcpListener do
     {:ok, socket} =
       :gen_tcp.listen(
         80,
-        [:binary, packet: :line, active: false, reuseaddr: true]
+        [:binary, active: false, reuseaddr: true]
       )
 
     IO.puts("Listening on port 80")
