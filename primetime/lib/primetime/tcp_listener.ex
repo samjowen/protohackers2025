@@ -1,10 +1,11 @@
 defmodule Primetime.TcpListener do
+  @moduledoc false
   use GenServer
 
   @port 80
 
   @impl true
-  def init(init = []) do
+  def init([] = _init) do
     {:ok, listen_socket} =
       :gen_tcp.listen(
         80,
