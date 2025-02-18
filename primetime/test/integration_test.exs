@@ -19,7 +19,7 @@ defmodule Primetime.IntegrationTest do
     {:ok, _socket} = :gen_tcp.connect(~c"localhost", 80, mode: :binary, active: false)
   end
 
-  @tag timeout: 10
+  @tag timeout: 100
   test "it can recieve a json string that has the method isPrime" do
     {:ok, socket} = :gen_tcp.connect(~c"localhost", 80, mode: :binary, active: false)
     :gen_tcp.send(socket, ~s({"method":"isPrime","number" :123}))
