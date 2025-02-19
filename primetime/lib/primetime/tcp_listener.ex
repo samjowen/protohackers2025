@@ -27,12 +27,12 @@ defmodule Primetime.TcpListener do
 
   @impl true
   def handle_continue(:accept_routine, %__MODULE__{} = state) do
-    Logger.debug("Starting :accept_routine")
+    # Logger.debug("Starting :accept_routine")
 
     case :gen_tcp.accept(state.listen_socket) do
       {:ok, socket} ->
         {:ok, {ip, _port}} = :inet.peername(socket)
-        Logger.debug("Accepted a connection from #{inspect(ip)}")
+        # Logger.debug("Accepted a connection from #{inspect(ip)}")
         GenServer.start(Primetime.PrimeServer, socket)
         {:noreply, state, {:continue, :accept_routine}}
 

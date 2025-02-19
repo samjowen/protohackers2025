@@ -6,7 +6,7 @@ defmodule Primetime.IntegrationTest do
   def start_receive(socket) do
     case :gen_tcp.recv(socket, 0) do
       {:ok, packet} ->
-        IO.puts("Got packet.")
+        # IO.puts("Got packet.")
         ^packet = ~s({"method":"isPrime","number" :123})
 
       {:error, reason} ->
