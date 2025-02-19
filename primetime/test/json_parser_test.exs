@@ -14,4 +14,9 @@ defmodule Primetime.JsonParserTest do
     split_string = get_first_json(test_string, delimiter: <<10>>)
     assert split_string == ~s({"method":"isPrime","number" :123})
   end
+
+  test "it can parse a valid json string" do
+    valid_json_test_string = ~s({"method":"isPrime","number" :123})
+    {:ok, _term} = decode_json(valid_json_test_string)
+  end
 end
