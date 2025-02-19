@@ -22,23 +22,14 @@ defmodule Primetime.JsonParserTest do
 
   test "it can split a buffer with three jsons and return the new buffer correctly" do
     test_string =
-      ~s(
-        {"method":"isPrime","number" :123}
-        #{<<10>>}
-        {"method":"isPrime","number" :456}
-        #{<<10>>}
-        {"method":"isPrime","number" :789}
+      ~s({"method":"isPrime","number" :123}#{<<10>>}{"method":"isPrime","number" :456}#{<<10>>}{"method":"isPrime","number" :789}
       )
 
     {message, new_buffer} = get_first_json(test_string, delimiter: <<10>>)
 
-    assert message == ~s(
-        {"method":"isPrime","number" :123})
+    assert message == ~s({"method":"isPrime","number" :123})
 
-    assert new_buffer == ~s(
-        {"method":"isPrime","number" :456}
-        #{<<10>>}
-        {"method":"isPrime","number" :789}
+    assert new_buffer == ~s({"method":"isPrime","number" :456}#{<<10>>}{"method":"isPrime","number" :789}
       )
   end
 end
