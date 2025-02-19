@@ -19,4 +19,26 @@ defmodule Primetime.JsonParserTest do
     valid_json_test_string = ~s({"method":"isPrime","number" :123})
     {:ok, _term} = decode_json(valid_json_test_string)
   end
+
+  test "it can split a buffer with three jsons and return the new buffer correctly" do
+    test_string =
+      ~s(
+        {"method":"isPrime","number" :123}
+        #{<<10>>}
+        {"method":"isPrime","number" :456}
+        #{<<10>>}
+        {"method":"isPrime","number" :789}
+      )
+
+    {message, new_buffer} = get_first_json(test_string, delimiter: <<10>>)
+
+    assert message == ~s(
+        {"method":"isPrime","number" :123})
+
+    assert new_buffer == ~s(
+        {"method":"isPrime","number" :456}
+        #{<<10>>}
+        {"method":"isPrime","number" :789}
+      )
+  end
 end
