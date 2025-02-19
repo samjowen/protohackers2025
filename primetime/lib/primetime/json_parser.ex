@@ -6,11 +6,9 @@ defmodule Primetime.JsonParser do
   end
 
   def get_first_json(jsons_string, delimiter: delimiter) when is_binary(delimiter) do
-    split_parts = jsons_string |> String.trim_leading() |> String.split(delimiter, parts: 2)
-
-    case length(split_parts) do
-      1 -> Enum.at(split_parts, 0)
-      2 -> {Enum.at(split_parts, 0), Enum.at(split_parts, 1)}
+    case String.split(String.trim_leading(jsons_string), delimiter, parts: 2) do
+      [message] -> {message, ""}
+      [message, new_buffer] -> {message, new_buffer}
     end
   end
 end

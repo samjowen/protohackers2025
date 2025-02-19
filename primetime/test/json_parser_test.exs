@@ -5,13 +5,13 @@ defmodule Primetime.JsonParserTest do
 
   test "it can split according to no delimiter" do
     test_string = ~s({"method":"isPrime","number" :123})
-    split_string = get_first_json(test_string, delimiter: <<10>>)
+    {split_string, _new_buffer} = get_first_json(test_string, delimiter: <<10>>)
     assert test_string == split_string
   end
 
   test "it can split according to a delimiter" do
     test_string = ~s(#{<<10>>}{"method":"isPrime","number" :123})
-    split_string = get_first_json(test_string, delimiter: <<10>>)
+    {split_string, _new_buffer} = get_first_json(test_string, delimiter: <<10>>)
     assert split_string == ~s({"method":"isPrime","number" :123})
   end
 
