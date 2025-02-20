@@ -12,8 +12,8 @@ defmodule Primetime.JsonStream do
     end
   end
 
-  defp json_validation_checks(json) do
-    check_json_has_valid_method(json)
+  defp check_json_has_number_key(json) when is_map(json) do
+    Map.has_key?(json, "number")
   end
 
   defp check_json_has_valid_method(json) when is_map(json) do
@@ -21,6 +21,11 @@ defmodule Primetime.JsonStream do
       "isPrime" -> true
       _ -> false
     end
+  end
+
+  defp json_validation_checks(json) do
+    checks = [&check_json_has_number_key/1, &check_json_has_valid_method/1]
+    Enum.all?(checks, fn check -> check.(json) end)
   end
 
   def is_json_valid?(string) do
