@@ -14,8 +14,14 @@ defmodule Primetime.JsonStream do
 
   def is_json_valid?(string) do
     case decode_json(string) do
-      {:ok, term} -> true
-      {:error, _reason} -> false
+      {:ok, term} ->
+        case Map.get(term, "method") do
+          "isPrime" -> true
+          _ -> false
+        end
+
+      {:error, _reason} ->
+        false
     end
   end
 end
