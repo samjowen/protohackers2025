@@ -49,5 +49,12 @@ defmodule Primetime.JsonParserTest do
 
       assert is_json_valid?(malformed_json) == false
     end
+
+    test "it should pass json validation for a valid json object" do
+      # Malformed because it starts with a regular bracket
+      malformed_json = ~s({"method":"isPrime","number":123)
+
+      assert is_json_valid?(malformed_json) == true
+    end
   end
 end
