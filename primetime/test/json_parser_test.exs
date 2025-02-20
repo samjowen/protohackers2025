@@ -64,5 +64,10 @@ defmodule Primetime.JsonParserTest do
       missing_number_key = ~s({"method":"isPrime"})
       assert is_json_valid?(missing_number_key) == false
     end
+
+    test "it should fail json validation if number value is NaN" do
+      nan_number = ~s({"method":"isPrime","number":"abc"})
+      assert is_json_valid?(nan_number) == false
+    end
   end
 end
