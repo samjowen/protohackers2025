@@ -16,6 +16,19 @@ defmodule Primetime.JsonStream do
     Map.has_key?(json, "number")
   end
 
+  defp check_json_number_is_a_number(json) when is_map(json) do
+    case Map.get(json, "number") do
+      nil ->
+        false
+
+      number when is_integer(number) or is_float(number) ->
+        true
+
+      _ ->
+        false
+    end
+  end
+
   defp check_json_has_valid_method(json) when is_map(json) do
     case Map.get(json, "method") do
       "isPrime" -> true
@@ -24,7 +37,7 @@ defmodule Primetime.JsonStream do
   end
 
   defp json_validation_checks(json) do
-    checks = [&check_json_has_number_key/1, &check_json_has_valid_method/1]
+    checks = [&check_json_has_number_key/1, &check_json_has_valid_method/1, &check_json_number_is_a_number/1]
     Enum.all?(checks, fn check -> check.(json) end)
   end
 
