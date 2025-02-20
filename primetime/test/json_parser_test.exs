@@ -59,5 +59,10 @@ defmodule Primetime.JsonParserTest do
       invalid_method_json = ~s({"method":"isEven","number":123})
       assert is_json_valid?(invalid_method_json) == false
     end
+
+    test "it should fail json validation if number key is absent" do
+      missing_method_key = ~s({"method":"isPrime","number":123})
+      assert is_json_valid?(missing_method_key) == false
+    end
   end
 end
