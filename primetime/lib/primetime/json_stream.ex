@@ -11,4 +11,8 @@ defmodule Primetime.JsonStream do
       [message, new_buffer] -> {message, new_buffer}
     end
   end
+
+  def is_json_valid?(_string) do
+    false
+  end
 end
