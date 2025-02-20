@@ -26,10 +26,19 @@ defmodule Primetime.JsonParserTest do
       )
 
     {message, new_buffer} = extract_first(test_string, delimiter: <<10>>)
-
     assert message == ~s({"method":"isPrime","number" :123})
-
     assert new_buffer == ~s({"method":"isPrime","number" :456}#{<<10>>}{"method":"isPrime","number" :789}
+      )
+  end
+
+  test "it can split a buffer where the input has a cut off json" do
+    test_string =
+      ~s({"method":"isPrime","number" :123}#{<<10>>}{"method":"isPrime",
+      )
+
+    {message, new_buffer} = extract_first(test_string, delimiter: <<10>>)
+    assert message == ~s({"method":"isPrime","number" :123})
+    assert new_buffer == ~s({"method":"isPrime",
       )
   end
 end
