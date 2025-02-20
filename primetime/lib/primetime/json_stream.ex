@@ -12,15 +12,27 @@ defmodule Primetime.JsonStream do
     end
   end
 
+  defp json_validation_checks(json) do
+    check_json_has_valid_method(json)
+  end
+
+  defp check_json_has_valid_method(json) when is_map(json) do
+    case Map.get(json, "method") do
+      "isPrime" -> true
+      _ -> false
+    end
+  end
+
   def is_json_valid?(string) do
     case decode_json(string) do
       {:ok, term} ->
-        case Map.get(term, "method") do
-          "isPrime" -> true
-          _ -> false
+        if json_validation_checks(term) do
+          true
+        else
+          false
         end
 
-      {:error, _reason} ->
+      _ ->
         false
     end
   end
