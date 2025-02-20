@@ -14,7 +14,7 @@ defmodule Primetime.PrimeServer do
   def handle_continue(:handle_recieve, state) do
     case :gen_tcp.recv(state, 0) do
       {:ok, _packet} ->
-        :gen_tcp.send(state, ~s({"method":"isPrime","number" :123}))
+        :gen_tcp.send(state, ~s({"method":"isPrime","prime":false}))
         {:noreply, state, {:continue, :handle_recieve}}
 
       _ ->
