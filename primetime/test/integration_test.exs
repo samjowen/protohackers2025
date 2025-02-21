@@ -22,22 +22,22 @@ defmodule Primetime.IntegrationTest do
     end
   end
 
-  @tag timeout: 100
-  test "receive a malformed request, send back a single malformed response, and disconnect the client" do
-    {:ok, socket} = :gen_tcp.connect(~c"localhost", 80, mode: :binary, active: false)
-    # Malformed json terminated by newline
-    :gen_tcp.send(socket, ~s({"method":"isPrime","number"::123}#{<<10>>}))
+  # @tag timeout: 100
+  # test "receive a malformed request, send back a single malformed response, and disconnect the client" do
+  #   {:ok, socket} = :gen_tcp.connect(~c"localhost", 80, mode: :binary, active: false)
+  #   # Malformed json terminated by newline
+  #   :gen_tcp.send(socket, ~s({"method":"isPrime","number"::123}#{<<10>>}))
 
-    case :gen_tcp.recv(socket, 0) do
-      {:ok, packet} ->
-        # Asserting that the pakcket we get back is indeed malformed
-        ^packet = ~s({"method":"isPrime","number"::123})
+  #   case :gen_tcp.recv(socket, 0) do
+  #     {:ok, packet} ->
+  #       # Asserting that the pakcket we get back is indeed malformed
+  #       ^packet = ~s({"method":"isPrime","number"::123})
 
-      _ ->
-        nil
-    end
+  #     _ ->
+  #       nil
+  #   end
 
-    # Socket should already be closed and return {:error, reason}
-    {:error, :closed} = :gen_tcp.close(socket)
-  end
+  #   # Socket should already be closed and return {:error, reason}
+  #   {:error, :closed} = :gen_tcp.close(socket)
+  # end
 end

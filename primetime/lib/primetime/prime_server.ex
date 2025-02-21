@@ -5,16 +5,16 @@ defmodule Primetime.PrimeServer do
   defstruct [:socket]
 
   @impl true
-  def init(socket) do
+  def init(%__MODULE__{} = initial_state) do
     send(self(), :main_routine)
-    {:ok, socket, {:continue, :handle_recieve}}
+    {:ok, initial_state, {:continue, :handle_recieve}}
   end
 
   @impl true
-  def handle_continue(:handle_recieve, state) do
-    case :gen_tcp.recv(state, 0) do
+  def handle_continue(:handle_recieve, %__MODULE__{} = state) do
+    case :gen_tcp.recv(state.socket, 0) do
       {:ok, _packet} ->
-        :gen_tcp.send(state, ~s({"method":"isPrime","prime":false}))
+        :gen_tcp.send(state.socket, ~s({"method":"isPrime","prime":false}))
         {:noreply, state, {:continue, :handle_recieve}}
 
       _ ->

@@ -2,6 +2,8 @@ defmodule Primetime.TcpListener do
   @moduledoc false
   use GenServer
 
+  alias Primetime.PrimeServer
+
   require Logger
 
   defstruct [:listen_socket]
@@ -31,9 +33,10 @@ defmodule Primetime.TcpListener do
 
     case :gen_tcp.accept(state.listen_socket) do
       {:ok, socket} ->
-        {:ok, {ip, _port}} = :inet.peername(socket)
-        # Logger.debug("Accepted a connection from #{inspect(ip)}")
-        GenServer.start(Primetime.PrimeServer, socket)
+        GenServer.start(PrimeServer, %PrimeServer{
+          socket: socket
+        })
+
         {:noreply, state, {:continue, :accept_routine}}
 
       {:error, reason} ->
