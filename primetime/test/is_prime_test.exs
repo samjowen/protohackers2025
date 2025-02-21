@@ -26,4 +26,8 @@ defmodule Primetime.PrimeTest do
   test "is_prime?/1 handles negative integers" do
     assert is_prime?(-1) === false
   end
+
+  test "is_prime?/1 handles 123" do
+    assert is_prime?(123) === false
+  end
 end
