@@ -30,22 +30,30 @@ defmodule Primetime.PrimeServer do
   def handle_continue(:handle_recieve, %__MODULE__{} = state) do
     case :gen_tcp.recv(state.socket, 0) do
       {:ok, packet} ->
-        {message, new_buffer} = extract_first(packet, delimiter: @message_delimiter)
-        Logger.info("Message: #{message}")
+        new_buffer = state.buffer <> packet
 
-        if is_json_valid?(message) do
-          :ok = handle_valid_json(state.socket, message)
-          Logger.debug("Old buffer: #{state.buffer}")
-          Logger.debug("New buffer: #{new_buffer}")
-          {:noreply, %{state | buffer: new_buffer}, {:continue, :handle_recieve}}
+        if String.length(new_buffer) > 0 do
+          Logger.info("Processing existing buffer: #{new_buffer}")
+          processed_buffer = handle_existing_buffer(new_buffer, state.socket)
+          {:noreply, %{state | buffer: processed_buffer}, {:continue, :handle_recieve}}
         else
-          # Stop the GenServer after handling the malformed JSON
-          handle_malformed_json(state.socket)
-          {:stop, :normal, state}
+          {:noreply, %{state | buffer: new_buffer}, {:continue, :handle_recieve}}
         end
 
-      _ ->
+      {:error, _reason} ->
         {:stop, :normal, state}
+    end
+  end
+
+  defp handle_message(message, socket) do
+    Logger.info("Handling message: #{message}")
+
+    if is_json_valid?(message) do
+      :ok = handle_valid_json(socket, message)
+    else
+      # Stop the GenServer after handling the malformed JSON
+      handle_malformed_json(socket)
+      {:stop, :normal}
     end
   end
 
@@ -69,5 +77,11 @@ defmodule Primetime.PrimeServer do
     end
 
     :ok
+  end
+
+  defp handle_existing_buffer(buffer, socket) do
+    {message, new_buffer} = extract_first(buffer, delimiter: @message_delimiter)
+    handle_message(message, socket)
+    new_buffer
   end
 end

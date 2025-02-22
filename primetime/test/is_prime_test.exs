@@ -30,4 +30,8 @@ defmodule Primetime.PrimeTest do
   test "is_prime?/1 handles 123" do
     assert is_prime?(123) === false
   end
+
+  test "is_prime?/1 handles 39239570" do
+    assert is_prime?(39_239_570) === false
+  end
 end
