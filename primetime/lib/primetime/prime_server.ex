@@ -9,8 +9,6 @@ defmodule Primetime.PrimeServer do
 
   @timeout_ms 5000
   @message_delimiter <<10>>
-  # Protohackers spec says we should send back a malformed json
-  # if we get one from a client \x{1F937}\x{200D}\x{2640}\x{FE0F}
   @malformed_response_json ~s({"method":"isPrime","number"::123}#{<<10>>})
   @is_prime_response_json ~s({"method":"isPrime","prime":true}#{<<10>>})
   @not_prime_response_json ~s({"method":"isPrime","prime":false}#{<<10>>})
@@ -90,7 +88,6 @@ defmodule Primetime.PrimeServer do
 
       _ ->
         Logger.debug("Buffer incomplete, waiting for more data...")
-        # Wait for more data before processing
         buffer
     end
   end
