@@ -83,14 +83,15 @@ defmodule Primetime.PrimeServer do
   end
 
   defp handle_existing_buffer(buffer, socket) do
-    {message, new_buffer} = extract_first(buffer, delimiter: @message_delimiter)
+    case extract_first(buffer, delimiter: @message_delimiter) do
+      {message, new_buffer} when message != "" ->
+        handle_message(message, socket)
+        handle_existing_buffer(new_buffer, socket)
 
-    if message == "" do
-      Logger.debug("Buffer incomplete, waiting for more data...")
-      buffer
-    else
-      handle_message(message, socket)
-      new_buffer
+      _ ->
+        Logger.debug("Buffer incomplete, waiting for more data...")
+        # Wait for more data before processing
+        buffer
     end
   end
 end
