@@ -7,6 +7,7 @@ defmodule Primetime.PrimeServer do
 
   require Logger
 
+  @timeout_ms 5000
   @message_delimiter <<10>>
   # Protohackers spec says we should send back a malformed json
   # if we get one from a client \x{1F937}\x{200D}\x{2640}\x{FE0F}
@@ -28,7 +29,7 @@ defmodule Primetime.PrimeServer do
 
   @impl true
   def handle_continue(:handle_recieve, %__MODULE__{} = state) do
-    case :gen_tcp.recv(state.socket, 0) do
+    case :gen_tcp.recv(state.socket, 0, @timeout_ms) do
       {:ok, packet} ->
         new_buffer = state.buffer <> packet
 
@@ -81,7 +82,13 @@ defmodule Primetime.PrimeServer do
 
   defp handle_existing_buffer(buffer, socket) do
     {message, new_buffer} = extract_first(buffer, delimiter: @message_delimiter)
-    handle_message(message, socket)
-    new_buffer
+
+    if message == "" do
+      Logger.debug("Buffer incomplete, waiting for more data...")
+      buffer
+    else
+      handle_message(message, socket)
+      new_buffer
+    end
   end
 end

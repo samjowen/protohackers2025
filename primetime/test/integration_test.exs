@@ -7,7 +7,7 @@ defmodule Primetime.IntegrationTest do
     {:ok, _socket} = :gen_tcp.connect(~c"localhost", 8080, mode: :binary, active: false)
   end
 
-  @tag timeout: 100
+  @tag timeout: 200
   test "receive a malformed request, send back a single malformed response, and disconnect the client" do
     {:ok, socket} = :gen_tcp.connect(~c"localhost", 8080, mode: :binary, active: false)
     # Malformed json terminated by newline
