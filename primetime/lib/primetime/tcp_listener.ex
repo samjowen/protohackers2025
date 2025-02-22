@@ -8,7 +8,7 @@ defmodule Primetime.TcpListener do
 
   defstruct [:listen_socket]
 
-  @port 80
+  @port 8080
 
   def start_link(:no_state = arg) when is_atom(arg) do
     GenServer.start_link(__MODULE__, arg)

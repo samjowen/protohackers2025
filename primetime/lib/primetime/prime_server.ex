@@ -31,6 +31,7 @@ defmodule Primetime.PrimeServer do
     case :gen_tcp.recv(state.socket, 0) do
       {:ok, packet} ->
         {message, new_buffer} = extract_first(packet, delimiter: @message_delimiter)
+        Logger.info("Message: #{message}")
 
         if is_json_valid?(message) do
           :ok = handle_valid_json(state.socket, message)
