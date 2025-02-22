@@ -9,10 +9,10 @@ defmodule Primetime.PrimeServer do
 
   @message_delimiter <<10>>
   # Protohackers spec says we should send back a malformed json
-  # if we get one from a client 🤷‍♀️
-  @malformed_response_json ~s({"method":"isPrime","number"::123})
-  @is_prime_response_json ~s({"method":"isPrime","prime":true})
-  @not_prime_response_json ~s({"method":"isPrime","prime":false})
+  # if we get one from a client \x{1F937}\x{200D}\x{2640}\x{FE0F}
+  @malformed_response_json ~s({"method":"isPrime","number"::123}#{<<10>>})
+  @is_prime_response_json ~s({"method":"isPrime","prime":true}#{<<10>>})
+  @not_prime_response_json ~s({"method":"isPrime","prime":false}#{<<10>>})
   defstruct [:socket, :buffer]
 
   @impl true
