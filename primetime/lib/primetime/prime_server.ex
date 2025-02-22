@@ -35,8 +35,6 @@ defmodule Primetime.PrimeServer do
 
         if is_json_valid?(message) do
           :ok = handle_valid_json(state.socket, message)
-          Logger.debug("Old buffer: #{state.buffer}")
-          Logger.debug("New buffer: #{new_buffer}")
           {:noreply, %{state | buffer: new_buffer}, {:continue, :handle_recieve}}
         else
           # Stop the GenServer after handling the malformed JSON

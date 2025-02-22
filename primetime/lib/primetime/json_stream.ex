@@ -6,9 +6,11 @@ defmodule Primetime.JsonStream do
   end
 
   def extract_first(jsons_string, delimiter: delimiter) when is_binary(delimiter) do
-    case String.split(String.trim_leading(jsons_string), delimiter, parts: 2) do
-      [message] -> {message, ""}
-      [message, new_buffer] -> {message, new_buffer}
+    case String.split(jsons_string, delimiter, parts: 2) do
+      # Extract first full message
+      [message, new_buffer] -> {String.trim(message), new_buffer}
+      # Keep the partial message in buffer
+      [partial_message] -> {"", partial_message}
     end
   end
 
