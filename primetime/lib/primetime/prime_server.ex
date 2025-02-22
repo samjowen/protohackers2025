@@ -72,8 +72,10 @@ defmodule Primetime.PrimeServer do
     is_number_prime? = is_prime?(number_to_test)
 
     if is_number_prime? do
+      Logger.info("Sending prime for #{number_to_test}")
       :gen_tcp.send(socket, @is_prime_response_json)
     else
+      Logger.info("Sending not prime for #{number_to_test}")
       :gen_tcp.send(socket, @not_prime_response_json)
     end
 
